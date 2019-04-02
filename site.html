@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coucou</title>
+	<meta charset="UTF-8">
+  </head>
+  <body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="formData.json"></script>
+	<script src="dico.json"></script>
+	<script type="text/javascript">
+	
+		$(document).ready(function() {
+		
+			var cat='';
+			var sous_cat='';
+			var heb="";
+				
+			$(".etape2").hide();
+			$(".etape3").hide();
+			
+			for(var i=0;i<formData.etape1.length;i++){
+				$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>")
+			}
+			//$("#regForm").append("<input type='submit' id='btn1'>");
+			$(".etape1").append("<input type='button' id='etape1' value='Suivant'>");
+		
+			$( "#regForm" ).submit(function( event ) {
+				event.preventDefault();
+				//etape1=$('#regForm').serialize();
+				cat=$("input[name='etape1']:checked").val();
+				console.log(cat);
+				$(".etape1").hide();
+				etape2();
+			});
+			
+			$("#etape1").click(function(){
+				cat=$("input[name='etape1']:checked").val();
+				console.log(cat);
+				$(".etape1").hide();
+				etape2();
+			});
+			
+			function etape2(){
+				$(".etape2").show();
+				for(var i=0;i<formData.etape2[cat].length;i++){
+					$(".etape2").append("<input type='checkbox' name='etape2' value="+formData.etape2[cat][i].id+">"+formData.etape2[cat][i].lib+"<br>")
+				}
+				$(".etape2").append("<input type='button' id='etape2' value='Suivant'>");
+			}
+			
+			$("#etape2").click(function(){
+				sous_cat=$("input[name='etape2']:checked").val();
+				console.log(sous_cat);
+			});
+		
+		});
+			
+			
+	</script>
+
+		<h1>Choisissez votre hébergement:</h1>
+
+		<form id="regForm" action="">
+		
+			<div class="etape1">Catégorie :<br>
+			
+				<!-- <form id="regForm" action="">
+				
+				</form>	 -->
+			</div>
+			
+
+			<div class="etape2">Hébergement :<br>
+			
+				<!-- <form id="regForm2" action="">
+			  
+			  
+				</form>  -->
+				
+			</div>
+
+			<div class="etape3">Equipements :<br>
+			
+				<!-- <form id="regForm2" action="">
+				
+				</form> -->
+				
+			</div>
+		
+		</form>
+		
+
+  </body>
+</html>

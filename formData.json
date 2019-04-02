@@ -1,0 +1,14 @@
+formData = {
+	etape1: [
+		{id:'h1', lib:'Hôtel'},
+		{id:'c1', lib:'Camping'},
+		{id:'l1', lib:'Hébergements Locatifs'}
+		],
+	etape2: {
+		'h1': [{id:'h1_1', lib:'Hôtel'},{id:'h1_2',lib:'Hôtel-Restaurant'}],
+		'c1': [{id:'h2_1', lib:'Camp de tourisme'},{id:'h2_2', lib:'Camp de loisirs'},{id:'h2_3', lib:'Camping à la ferme'},{id:'h2_4', lib:'Aire naturelle'},{id:'h2_5', lib:'Parc résidentiel de loisirs'}],
+		'l1': [{id:'h3_1', lib:'Meublés'},{id:'h3_2', lib: 'Chambre d\'hôtes'},{id:'h3_3', lib:'Hébergement insolite'},{id:'h3_4', lib:'Locatif sur camping'},{id:'h3_5', lib:'Agence immobilière'},{id:'h3_6', lib:'Village locatif'},{id:'h3_7', lib:'Bateau'}]
+		}
+
+		
+	}
