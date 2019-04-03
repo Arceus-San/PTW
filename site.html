@@ -1,95 +1,205 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Coucou</title>
+    <title>LoireBNB</title>
 	<meta charset="UTF-8">
   </head>
   <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="formData.json"></script>
-	<script src="dico.json"></script>
 	<script type="text/javascript">
 	
 		$(document).ready(function() {
 		
 			var cat='';
-			var sous_cat='';
-			var heb="";
-				
-			$(".etape2").hide();
-			$(".etape3").hide();
-			
-			for(var i=0;i<formData.etape1.length;i++){
-				$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>")
-			}
-			//$("#regForm").append("<input type='submit' id='btn1'>");
-			$(".etape1").append("<input type='button' id='etape1' value='Suivant'>");
 		
 			$( "#regForm" ).submit(function( event ) {
 				event.preventDefault();
-				//etape1=$('#regForm').serialize();
-				cat=$("input[name='etape1']:checked").val();
-				console.log(cat);
-				$(".etape1").hide();
-				etape2();
+				$(".etape7").hide();
+				console.log($('#regForm').serialize());
 			});
 			
-			$("#etape1").click(function(){
-				cat=$("input[name='etape1']:checked").val();
-				console.log(cat);
-				$(".etape1").hide();
-				etape2();
-			});
 			
+			function etape1(){
+				$(".etape1").append("<p>Catégorie :</p>");
+
+				for(var i=0;i<formData.etape1.length;i++){
+					$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
+				}
+
+				$(".etape1").append("<input type='button' id='etape1' value='Suivant'>");
+
+				$("#etape1").click(function(){
+					cat=$("input[name='etape1']:checked").val();
+					$(".etape1").hide();
+					etape2();
+				});
+			}
+
 			function etape2(){
 				$(".etape2").show();
+				$(".etape2").append("<p>Catégorie :</p>");
 				for(var i=0;i<formData.etape2[cat].length;i++){
 					$(".etape2").append("<input type='checkbox' name='etape2' value="+formData.etape2[cat][i].id+">"+formData.etape2[cat][i].lib+"<br>")
 				}
 				$(".etape2").append("<input type='button' id='etape2' value='Suivant'>");
+
+				$("#etape2").click(function(){
+					$(".etape2").hide();
+					if(cat=='h1'){
+						etape5();
+					}else{
+						etape3();
+					}
+				});
 			}
 			
-			$("#etape2").click(function(){
-				sous_cat=$("input[name='etape2']:checked").val();
-				console.log(sous_cat);
-			});
+			
+			function etape3(){
+				$(".etape3").show();
+
+				if(cat=='c1'){
+					$(".etape3").append("<p>Hébergement :</p>");
+				} else if(cat=='l1'){
+					$(".etape3").append("<p>Nombre de chambres</p>");
+				}
+
+				for(var i=0;i<formData.etape3[cat].length;i++){
+					$(".etape3").append("<input type='checkbox' name='etape3' value="+formData.etape3[cat][i].id+">"+formData.etape3[cat][i].lib+"<br>")
+				}
+
+				$(".etape3").append("<input type='button' id='etape3' value='Suivant'>");
+
+				$("#etape3").click(function(){
+					$(".etape3").hide();
+					etape4();
+				});
+			}
+
+			function etape4(){
+				$(".etape4").show();
+
+				if(cat=='c1'){
+					$(".etape4").append("<p>Services proposés :</p>");
+				} else if(cat=='l1'){
+					$(".etape4").append("<p>Nombre de personnes :</p>");
+				}
+
+				for(var i=0;i<formData.etape4[cat].length;i++){
+					$(".etape4").append("<input type='checkbox' name='etape4' value="+formData.etape4[cat][i].id+">"+formData.etape4[cat][i].lib+"<br>")
+				}
+
+				$(".etape4").append("<input type='button' id='etape4' value='Suivant'>");
+
+				$("#etape4").click(function(){
+					$(".etape4").hide();
+					etape5();
+				});
+			}
+
+			function etape5(){
+				$(".etape5").show();
+
+				$(".etape5").append("<p>Catégorie :</p>");
+
+				for(var i=0;i<formData.etape5.length;i++){
+					$(".etape5").append("<input type='checkbox' name='etape5' value="+formData.etape5[i].id+">"+formData.etape5[i].lib+"<br>");
+				}
+
+				$(".etape5").append("<input type='button' id='etape5' value='Suivant'>");
+
+				$("#etape5").click(function(){
+					$(".etape5").hide();
+					etape6();
+				});
+			}
+
+			function etape6(){
+				$(".etape6").show();
+
+				$(".etape6").append("<p>Equipements :</p>");
+
+				for(var i=0;i<formData.etape6.length;i++){
+					$(".etape6").append("<input type='checkbox' name='etape6' value="+formData.etape6[i].id+">"+formData.etape6[i].lib+"<br>");
+				}
+
+				$(".etape6").append("<input type='button' id='etape6' value='Suivant'>");
+
+				$("#etape6").click(function(){
+					$(".etape6").hide();
+					etape7();
+				});
+			}
+
+			function etape7(){
+				$(".etape7").show();
+
+				$(".etape7").append("<p>Département :</p>");
+
+				for(var i=0;i<formData.etape7_1.length;i++){
+					$(".etape7").append("<input type='checkbox' name='etape7_1' value="+formData.etape7_1[i].id+">"+formData.etape7_1[i].lib+"<br>");
+				}
+
+				$(".etape7").append("<p>Autres Options :</p>");
+
+				for(var i=0;i<formData.etape7_2.length;i++){
+					$(".etape7").append("<input type='checkbox' name='etape7_2' value="+formData.etape7_2[i].id+">"+formData.etape7_2[i].lib+"<br>");
+				}
+
+				$(".etape7").append("<p>Ville :</p>");
+
+				$(".etape7").append("<input type='text' name='etape7_3'><br>");
+
+				$("#regForm").append("<input type='submit' id='btn1'>");
+			}
+
+			etape1();
 		
 		});
 			
 			
 	</script>
 
-		<h1>Choisissez votre hébergement:</h1>
+		<h1>LoireBNB</h1>
+
+		<h2>Choisissez votre hébergement</h2>
 
 		<form id="regForm" action="">
 		
-			<div class="etape1">Catégorie :<br>
+			<div class="etape1">
 			
-				<!-- <form id="regForm" action="">
-				
-				</form>	 -->
 			</div>
 			
-
-			<div class="etape2">Hébergement :<br>
+			<div class="etape2">
 			
-				<!-- <form id="regForm2" action="">
-			  
-			  
-				</form>  -->
+			</div>
+
+			<div class="etape3">
+			
 				
 			</div>
 
-			<div class="etape3">Equipements :<br>
+			<div class="etape4">
 			
-				<!-- <form id="regForm2" action="">
 				
-				</form> -->
+			</div>
+
+			<div class="etape5">
+			
+				
+			</div>
+
+			<div class="etape6">
+			
+				
+			</div>
+
+			<div class="etape7">
+			
 				
 			</div>
 		
 		</form>
-		
 
   </body>
 </html>
