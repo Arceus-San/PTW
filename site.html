@@ -3,6 +3,8 @@
   <head>
     <title>LoireBNB</title>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   </head>
   <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -21,7 +23,7 @@
 			
 			
 			function etape1(){
-				$(".etape1").append("<p>Catégorie :</p>");
+				//$(".etape1").append("<p>Catégorie :</p>");
 
 				for(var i=0;i<formData.etape1.length;i++){
 					$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
@@ -160,6 +162,8 @@
 			
 	</script>
 
+		<div id="tete">
+
 		<h1>LoireBNB</h1>
 
 		<h2>Choisissez votre hébergement</h2>
@@ -200,6 +204,8 @@
 			</div>
 		
 		</form>
+
+		</div>
 
   </body>
 </html>
