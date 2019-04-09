@@ -9,17 +9,168 @@
   <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="formData.json"></script>
+	<script src="result.json"></script>
 	<script type="text/javascript">
 	
 		$(document).ready(function() {
 		
 			var cat='';
+			var ser='';
+			var trad1='';
 		
 			$( "#regForm" ).submit(function( event ) {
 				event.preventDefault();
 				$(".etape7").hide();
-				console.log($('#regForm').serialize());
+				//console.log($('#regForm').serialize());
+				ser=$('#regForm').serialize();
+				trad1=ser.split("&");
+				traduction();
+				
 			});
+			
+			function traduction(){
+			//console.log(trad1);
+				for(var i=0;i<trad1.length;i++){
+					var temp= trad1[i].split("=");
+					
+					switch(temp[0]){
+					
+						case "etape1":
+							//for(var j=0;j<formData['etape1'].length;j++){
+							for(var j=0;j<formData.etape1.length;j++){
+								if(formData.etape1[j].id==cat){
+									console.log(formData.etape1[j].lib);
+									break;
+								}
+							}
+							break;
+							
+						case "etape2":
+								switch(cat){
+									case "h1":
+										for(var j=0;j<formData.etape2.h1.length;j++){
+											if(formData.etape2.h1[j].id==temp[1]){
+												console.log(formData.etape2.h1[j].lib);
+												break;
+											}
+										}
+										break;
+										
+									case "c1":
+										for(var j=0;j<formData.etape2.c1.length;j++){
+											if(formData.etape2.c1[j].id==temp[1]){
+												console.log(formData.etape2.c1[j].lib);
+												break;
+											}
+										}
+										break;
+										
+									case "l1":
+										for(var j=0;j<formData.etape2.l1.length;j++){
+											if(formData.etape2.l1[j].id==temp[1]){
+												console.log(formData.etape2.l1[j].lib);
+												break;
+											}
+										}
+										break;
+								}
+							break;
+						
+						case "etape3":
+							switch(cat){
+									case "c1":
+										for(var j=0;j<formData.etape3.c1.length;j++){
+											if(formData.etape3.c1[j].id==temp[1]){
+												console.log(formData.etape3.c1[j].lib);
+												break;
+											}
+										}
+										break;
+										
+									case "l1":
+										for(var j=0;j<formData.etape3.l1.length;j++){
+											if(formData.etape3.l1[j].id==temp[1]){
+												console.log(formData.etape3.l1[j].lib);
+												break;
+											}
+										}
+										break;
+								}
+							break;
+						
+						case "etape4":
+								switch(cat){
+									case "c1":
+										for(var j=0;j<formData.etape4.c1.length;j++){
+											if(formData.etape4.c1[j].id==temp[1]){
+												console.log(formData.etape4.c1[j].lib);
+												break;
+											}
+										}
+										break;
+										
+									case "l1":
+										for(var j=0;j<formData.etape4.l1.length;j++){
+											if(formData.etape4.l1[j].id==temp[1]){
+												console.log(formData.etape4.l1[j].lib);
+												break;
+											}
+										}
+										break;
+								}
+							break;
+						
+						case "etape5":
+							for(var j=0;j<formData.etape5.length;j++){
+								if(formData.etape5[j].id==temp[1]){
+									console.log(formData.etape5[j].lib);
+									break;
+								}
+							}
+							break;
+						
+						case "etape6":
+							for(var j=0;j<formData.etape6.length;j++){
+								if(formData.etape6[j].id==temp[1]){
+									console.log(formData.etape6[j].lib);
+									break;
+								}
+							}
+							break;
+							
+						case "etape7_1":
+							for(var j=0;j<formData.etape7_1.length;j++){
+								if(formData.etape7_1[j].id==temp[1]){
+									console.log(formData.etape7_1[j].lib);
+									break;
+								}
+							}
+							break;
+							
+						case "etape7_2":
+							for(var j=0;j<formData.etape7_2.length;j++){
+								if(formData.etape7_2[j].id==temp[1]){
+									console.log(formData.etape7_2[j].lib);
+									break;
+								}
+							}
+							break;
+							
+						case "etape7_3":
+							if(temp[1]==""){
+								console.log("VIDE");
+							}else{
+								console.log(temp[1]);
+							}
+							break;
+						
+						
+					}
+					
+					
+				}
+				
+			}
 			
 			
 			function etape1(){
