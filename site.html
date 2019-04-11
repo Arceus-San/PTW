@@ -9,7 +9,6 @@
   <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="formData.json"></script>
-	<script src="result.json"></script>
 	<script type="text/javascript">
 	
 		$(document).ready(function() {
@@ -17,6 +16,17 @@
 			var cat='';
 			var ser='';
 			var trad1='';
+			var result={
+				etape1:[],
+				etape2:[],
+				etape3:[],
+				etape4:[],
+				etape5:[],
+				etape6:[],
+				etape7_1:[],
+				etape7_2:[],
+				etape7_3:[]
+			};
 		
 			$( "#regForm" ).submit(function( event ) {
 				event.preventDefault();
@@ -25,6 +35,7 @@
 				ser=$('#regForm').serialize();
 				trad1=ser.split("&");
 				traduction();
+				console.log(result);
 				
 			});
 			
@@ -32,15 +43,15 @@
 			//console.log(trad1);
 				for(var i=0;i<trad1.length;i++){
 					var temp= trad1[i].split("=");
-					
 					switch(temp[0]){
 							
 						case "etape2":
 						case "etape3":
 						case "etape4":
+							var arr=[];
 							for(var j=0;j<formData[temp[0]][cat].length;j++){
 								if(formData[temp[0]][cat][j].id==temp[1]){
-									console.log(formData[temp[0]][cat][j].lib);
+									result[temp[0]].push(formData[temp[0]][cat][j].lib);
 									break;
 								}
 							}
@@ -53,18 +64,14 @@
 						case "etape7_2":
 							for(var j=0;j<formData[temp[0]].length;j++){
 								if(formData[temp[0]][j].id==temp[1]){
-									console.log(formData[temp[0]][j].lib);
+									result[temp[0]].push(formData[temp[0]][j].lib);
 									break;
 								}
 							}
 							break;
 							
 						case "etape7_3":
-							if(temp[1]==""){
-								console.log("VIDE");
-							}else{
-								console.log(temp[1]);
-							}
+							result[temp[0]].push(temp[1]);
 							break;
 						
 						
@@ -72,13 +79,34 @@
 					
 					
 				}
+				var json = JSON.stringify(result);
+				
+				$.ajax({
+					method: 'GET',
+					url: 'localhost:8080/search',
+					data: json,
+					dataType: json,
+					success: function(data) {
+						///que faire avec les données ????
+						data.forEach(function(h) {
+							//afficher l'hébergement h
+							//ajouter le marqueur sur la carte
+						});
+					},
+					error: function(a,errorCode, errorThrown) {
+						//pendant le dev.
+					}
+				})
+				
+				
+				
 				
 			}
 			
 			
 			function etape1(){
 				//$(".etape1").append("<p>Catégorie :</p>");
-
+				
 				for(var i=0;i<formData.etape1.length;i++){
 					$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
 				}

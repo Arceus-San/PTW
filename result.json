@@ -1,9 +1,2 @@
 result = {
-	etape1:{param:'',val:[]},
-	etape2:{param:'',val:[]},
-	etape3:{param:'',val:[]},
-	etape4:{param:'',val:[]},
-	etape5:{param:'',val:[]},
-	etape6:{param:'',val:[]},
-	etape7:{param:'',val:[]}
 };
