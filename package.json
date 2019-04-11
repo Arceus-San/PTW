@@ -1,0 +1,22 @@
+{
+  "name": "projet_tw",
+  "version": "1.0.0",
+  "description": "Projet de Technologies du Web 3",
+  "main": "expressTest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arceus-San/PTW.git"
+  },
+  "author": "Benjamin Bardy, Guillaume Dax, Maxime Gresse",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arceus-San/PTW/issues"
+  },
+  "homepage": "https://github.com/Arceus-San/PTW#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3"
+  }
+}

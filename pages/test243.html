@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<!-- https://mapicons.mapsmarker.com -->
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!-- Nous chargeons les fichiers CDN de Leaflet. Le CSS AVANT le JS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" ></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+		<!-- <script id="monfichier" src="test243.js"></script> -->
+		
+		<style type="text/css">
+			#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+				height:400px;
+			}
+		</style>
+		<title>Carte</title>
+	</head>
+	<body>
+		
+		<div id="map">
+			<!-- Ici s'affichera la carte -->
+		</div>
+		<form>
+		<input type=checkbox name=Choix1 id="checkBox" value="Type d'habitation"> <b>Type d'habitation :</b>
+				<div id="locatif" hidden>
+				<input type=radio name=choix value="Meublés"> Meublés
+				<input type=radio name=choix value="Chambres d'hôtes"> Chambres d'hôtes
+				<input type=radio name=choix value="Hébergement insolite"> Hébergement insolite
+				<input type=radio name=choix value="Locatif sur camping"> Locatif sur camping
+				<input type=radio name=choix value="Village locatif"> Village locatif
+				<input type=radio name=choix value="Bateau"> Bateau
+				</div>
+		<input type=checkbox name=Choix1 id="checkBox1" value="Hôtel"> <b>Hôtel :</b>
+		<div id="chambres" >
+				<input type=checkbox name=choix value="1"> 1
+				<input type=checkbox name=choix value="2"> 2
+				<input type=checkbox name=choix value="3">3
+				<input type=checkbox name=choix value="4"> 4
+				<input type=checkbox name=choix value="5"> 5
+				<input type=checkbox name=choix value="6"> 6
+				<input type=checkbox name=choix value="7"> 7
+				<input type=checkbox name=choix value="8"> 8
+				<input type=checkbox name=choix value="9"> 9
+				</div>
+		</form>
+		<script type="text/javascript">
+
+		
+		
+		var cities = L.layerGroup();
+		function hotel(cities){
+			$.getJSON('hôtel.json',function(data){
+					var objet_type = {};
+			
+			function layer(id,val,Icon){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id);
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+<!-- 				overlays[C]=cities; -->
+			}
+		
+			$("#checkBox1").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var valeur = $(this).val();
+				var id = valeur ;
+				var val = data;
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+valeur+'.png',
+				iconSize:     [18, 25], // size of the icon
+				shadowSize:   [18, 25], // size of the shadow
+				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+				shadowAnchor: [4, 62],  // the same for the shadow
+				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				});
+				layer(id,val,Icon); 
+				}
+			});
+			
+});		
+};
+
+		function locatif(cities){
+			$.getJSON('locatif.json',function(data){
+			
+			console.log(data[0]);		
+			
+			var objet_type = {};
+			
+			function layer(id,val){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var valeur = val[i].fields.typehabitation;
+				var rel ;
+				if (typeof valeur == 'undefined'){
+					rel = "undefined";
+				}else{
+				rel = valeur.split(",")[0];
+				}
+				var coor2 = [coor[1],coor[0]];
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+rel+'.png',
+				iconSize:     [18, 25], // size of the icon
+				shadowSize:   [18, 25], // size of the shadow
+				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+				shadowAnchor: [4, 62],  // the same for the shadow
+				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				});
+				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id +"<br>"+rel+"<br>");
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+<!-- 				
+			}
+			
+		var filtre = "type"; 
+		var filtre2 ="capacitenbchambres";
+		function filtrage (data,objet_type,filtre){
+			console.log("data",data);
+			console.log("objet_type",objet_type);
+			var i;	
+			var nbr = 0;
+			var list_tout_type = [];
+			for (i = 0; i < (data.length); i++) {
+				var type = data[i].fields[filtre];
+					if (typeof type !== 'undefined'){
+					var rel ;
+						if (!isNaN(type) ){
+							rel = type.toString();
+						}else{
+						rel = type.split(",");
+						}
+							for (var tempo in rel) {
+								if(rel.hasOwnProperty(tempo)){
+									if (rel[tempo] in objet_type){
+									objet_type[rel[tempo]].push(data[i]);	
+									}else{
+									objet_type[rel[tempo]] = [data[i]];
+									}
+										
+								}
+							}
+							
+						}			
+			}
+			console.log(objet_type);
+			console.log(Object.keys(objet_type));
+			console.log(Object.values(objet_type));
+		}
+		filtrage(data,objet_type,filtre);
+
+		
+			$("input[name=choix]").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var id = $(this).val();
+				console.log(id);
+				var v = objet_type[id];
+				objet_type = {};
+				filtrage(v,objet_type,filtre2);
+				layer(id,v); 
+				}
+				
+			});
+			
+});		
+};
+
+	$('#checkBox').click(function(){
+		if ($('#checkBox').is(':checked')){
+			$("#locatif").show();
+			cities.clearLayers();
+			locatif(cities);
+		}else{
+			$("#locatif").hide();
+			cities.clearLayers();
+			hotel(cities);
+		}
+		});
+			// On initialise la latitude et la longitude de Paris (centre de la carte)
+			var lat = 47.361903;
+			var lon = -0.861994;
+			var macarte = null;
+			// Fonction d'initialisation de la carte
+				var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+				'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+				
+				var fond = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                    // Il est toujours bien de laisser le lien vers la source des données
+                    attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+                    minZoom: 1,
+                    maxZoom: 40
+                })
+				
+				var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
+					streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
+				
+				var baseLayers = {
+					"Fond" : fond
+				};
+				var overlays = {
+					"Cities": cities
+					
+				}
+				// Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
+                macarte = L.map('map',{
+					center: [lat, lon],
+					zoom: 8,
+					layers: [fond,cities]
+				});
+				L.control.layers(baseLayers,overlays).addTo(macarte);
+
+	
+		</script>
+		
+	</body>
+</html>
+
