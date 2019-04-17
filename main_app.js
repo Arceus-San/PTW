@@ -82,6 +82,19 @@ app.post("/add", (req,res) => {
 	console.log(req.body);
 	res.redirect("/");
 
-})
+});
+
+
+app.post("/sendingData", (req, res) => {
+	console.log("mkjlkjmjl");
+
+	console.log(req.body);
+
+});
+
+
+
+
+
 
 app.listen(8000, () => {console.log("Connected to localhost on port 8000");});
