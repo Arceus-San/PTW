@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
 
-var database = require("./databases/hebergements_data.json");
+var database = require("./databases/locatifs.json");
 
 const DB_NAME = "test";
 const url = "mongodb://localhost/"+DB_NAME;

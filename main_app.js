@@ -7,7 +7,7 @@ const DB_NAME = "test";
 const COLLECTION_NAME = "data";
 const url = "mongodb://localhost/"+DB_NAME;
 
-var database = require("./databases/hebergements_data.json");
+var database = require("./databases/locatifs.json");
 
 app = express();
 
