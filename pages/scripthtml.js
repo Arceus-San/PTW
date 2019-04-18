@@ -90,11 +90,17 @@ $(document).ready(function() {
 			function etape1(){
 				//$(".etape1").append("<p>Catégorie :</p>");
 				
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape1.length;i++){
-					$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
+					//$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
+					div.append("<input  class='form-check-input' type='radio' id='inlineRadio"+i+"' name='etape1' value="+formData.etape1[i].id+">");
+					div.append("<label  class='form-check-label' for='inlineRadio"+i+"'>"+formData.etape1[i].lib+"</label>");
+					//$(".etape1").append("</div>")
 				}
-
-				$(".etape1").append("<input type='button' id='etape1' value='Suivant'>");
+				
+				$(".etape1").append(div);
+				
+				$(".etape1").append("<input type='button' class='btn btn-primary' id='etape1' value='Suivant'>");
 
 				$("#etape1").click(function(){
 					cat=$("input[name='etape1']:checked").val();
@@ -107,7 +113,9 @@ $(document).ready(function() {
 				$(".etape2").show();
 				$(".etape2").append("<p>Catégorie :</p>");
 				for(var i=0;i<formData.etape2[cat].length;i++){
-					$(".etape2").append("<input type='checkbox' name='etape2' value="+formData.etape2[cat][i].id+">"+formData.etape2[cat][i].lib+"<br>")
+					$(".etape2").append("<div class='form-check form-check-inline'>")
+					$(".etape2").append("<input class='form-check-input' id='inlineCheckbox"+i+"' type='checkbox' name='etape2' value="+formData.etape2[cat][i].id+">"+formData.etape2[cat][i].lib)
+					$(".etape2").append("</div>")
 				}
 				$(".etape2").append("<input type='button' id='etape2' value='Suivant'>");
 
@@ -249,11 +257,7 @@ $(document).ready(function() {
 				var val = data;
 				var Icon = L.icon({
 				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25], // size of the icon
-				shadowSize:   [18, 25], // size of the shadow
-				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-				shadowAnchor: [4, 62],  // the same for the shadow
-				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				iconSize:     [18, 25]
 				});
 				layer(id,val,Icon); 
 				}
@@ -317,11 +321,7 @@ $(document).ready(function() {
 				var coor2 = [coor[1],coor[0]];
 				var Icon = L.icon({
 				iconUrl: 'Icons_markers/'+rel+'.png',
-				iconSize:     [18, 25], // size of the icon
-				shadowSize:   [18, 25], // size of the shadow
-				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-				shadowAnchor: [4, 62],  // the same for the shadow
-				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				iconSize:     [18, 25]
 				});
 				var popup = L.popup().setContent(nom);
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);

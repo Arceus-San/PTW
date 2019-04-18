@@ -93,11 +93,7 @@
 				var val = data;
 				var Icon = L.icon({
 				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25], // size of the icon
-				shadowSize:   [18, 25], // size of the shadow
-				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-				shadowAnchor: [4, 62],  // the same for the shadow
-				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				iconSize:     [18, 25]
 				});
 				layer(id,val,Icon); 
 				}
@@ -161,11 +157,7 @@
 				var coor2 = [coor[1],coor[0]];
 				var Icon = L.icon({
 				iconUrl: 'Icons_markers/'+rel+'.png',
-				iconSize:     [18, 25], // size of the icon
-				shadowSize:   [18, 25], // size of the shadow
-				iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-				shadowAnchor: [4, 62],  // the same for the shadow
-				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				iconSize:     [18, 25]
 				});
 				var popup = L.popup().setContent(nom);
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
