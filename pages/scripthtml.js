@@ -284,13 +284,34 @@ $(document).ready(function() {
 			}
 			salut(data,["Meublés"],"type");
 			
+			function notation_stars(nb){
+				var cat = nb.split(" ")[0];
+				console.log(cat);
+				$(".rating").html("");
+				$(".rating").append(cat);
+				for (i=1;i<=5;i++){
+					if (i<=cat){
+					$(".rating").append("<i>"+"<img src='Icons_markers/stars_complet.png' style='padding:5px;'>"+"</i>");
+					}
+					else if ((i-nb)==0.5){
+							$(".rating").append("<i>"+"<img src='Icons_markers/stars_semi.png' style='padding:5px;'>"+"</i>");
+						
+						}else{
+							$(".rating").append("<i>"+"<img src='Icons_markers/stars.png' style='padding:5px;'>"+"</i>");
+						}
+						
+					}
+					
+				};
+			
 			function info(val){
 				var nom = val.fields.nomoffre;
 				var adresse = val.fields.adresse2;
-				var catégorie = val.fields.categorie;
+				var categorie = val.fields.categorie;
 				var codepostal = val.fields.codepostal;
 				var tel = val.fields.commtel;
 				var siteweb = val.fields.commweb;
+				notation_stars(categorie);
 				if (typeof siteweb == 'undefined'){
 					siteweb = "Pas de site web";
 				}
