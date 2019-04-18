@@ -15,11 +15,39 @@
 			#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
 				height:400px;
 			}
+			ul.notes-echelle {
+				margin:0;
+				padding:0;
+				font:.75em/1.2 Arial, Helvetica, sans-serif;
+			}
+			ul.notes-echelle li {
+				float:left;
+				margin:0;
+				padding:0;
+				list-style:none;
+				min-width:20px;
+				min-height:20px;
+			}
+			/* Correctif IE6 sur min-width & min-height */
+			* html ul.notes-echelle.js li {
+				width:20px;
+				height:20px;
+			}
+			ul.notes-echelle li label {
+				display:block;
+				text-align:center;
+				line-height:20px;
+				background:url(etoiles.gif) center top no-repeat;
+				cursor:pointer;
+			}
 		</style>
 		<title>Carte</title>
 	</head>
 	<body>
-		
+		<div id="div" width="100px" height="400px" style="display: block;float: right;padding:10px;border-style:solid;border-width:5px;">	
+			<h1 id="hd" style="max-width:500px" ></h1>
+			<p id="pd"></p>
+		</div>
 		<div id="map">
 			<!-- Ici s'affichera la carte -->
 		</div>
@@ -34,23 +62,12 @@
 				<input type=radio name=choix value="Bateau"> Bateau
 				</div>
 		<input type=checkbox name=Choix1 id="checkBox1" value="Hôtel"> <b>Hôtel :</b>
-		<div id="chambres" >
-				<input type=checkbox name=choix value="1"> 1
-				<input type=checkbox name=choix value="2"> 2
-				<input type=checkbox name=choix value="3">3
-				<input type=checkbox name=choix value="4"> 4
-				<input type=checkbox name=choix value="5"> 5
-				<input type=checkbox name=choix value="6"> 6
-				<input type=checkbox name=choix value="7"> 7
-				<input type=checkbox name=choix value="8"> 8
-				<input type=checkbox name=choix value="9"> 9
-				</div>
 		</form>
 		<script type="text/javascript">
 
 		
-		
-		var cities = L.layerGroup();
+		$("#div").hide();
+		var cities = L.featureGroup();
 		function hotel(cities){
 			$.getJSON('hôtel.json',function(data){
 					var objet_type = {};
@@ -60,13 +77,14 @@
 				var nom = val[i].fields.nomoffre;
 				var coor = val[i].geometry.coordinates;
 				var coor2 = [coor[1],coor[0]];
-				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id);
+				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id)
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
 				}
 				console.log(cities);
 <!-- 				overlays[C]=cities; -->
 			}
-		
+
+			
 			$("#checkBox1").change(function(){
 			if($(this).is(':checked')) {
 				cities.clearLayers();
@@ -90,12 +108,46 @@
 
 		function locatif(cities){
 			$.getJSON('locatif.json',function(data){
+			var filtre = "type"; 
+			var filtre2 ="capacitenbchambres";
+			var r = [];
+			function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+					} 
+				}
+			}
+			console.log(r);
+			}
+			salut(data,["Meublés"],"type");
 			
-			console.log(data[0]);		
+			function info(val){
+				var nom = val.fields.nomoffre;
+				var adresse = val.fields.adresse2;
+				var catégorie = val.fields.categorie;
+				var codepostal = val.fields.codepostal;
+				var tel = val.fields.commtel;
+				var siteweb = val.fields.commweb;
+				if (typeof siteweb == 'undefined'){
+					siteweb = "Pas de site web";
+				}
+				$("#hd").html("");
+				$("#pd").html("");
+				$("#hd").append("<b>"+nom+"<b>");
+				$("#pd").append("<img src='Icons_markers/marqueur.png' style='padding:5px;'>"+adresse+" "+codepostal+"<br>");
+				$("#pd").append("<img src='Icons_markers/site_web.png' style='padding:5px;'>"+siteweb+"<br>");
+				$("#pd").append("<img src='Icons_markers/tel.png' style='padding:5px;'>"+tel+"<br>");
+				
+				
+				
+				
+			};
 			
-			var objet_type = {};
 			
-			function layer(id,val){
+			function layer(val){
 			for (i=0;i<val.length;i++){
 				var nom = val[i].fields.nomoffre;
 				var coor = val[i].geometry.coordinates;
@@ -115,69 +167,43 @@
 				shadowAnchor: [4, 62],  // the same for the shadow
 				popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 				});
-				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id +"<br>"+rel+"<br>");
+				var popup = L.popup().setContent(nom);
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
 				}
 				console.log(cities);
 <!-- 				
 			}
+			layer(r);  
 			
-		var filtre = "type"; 
-		var filtre2 ="capacitenbchambres";
-		function filtrage (data,objet_type,filtre){
-			console.log("data",data);
-			console.log("objet_type",objet_type);
-			var i;	
-			var nbr = 0;
-			var list_tout_type = [];
-			for (i = 0; i < (data.length); i++) {
-				var type = data[i].fields[filtre];
-					if (typeof type !== 'undefined'){
-					var rel ;
-						if (!isNaN(type) ){
-							rel = type.toString();
-						}else{
-						rel = type.split(",");
-						}
-							for (var tempo in rel) {
-								if(rel.hasOwnProperty(tempo)){
-									if (rel[tempo] in objet_type){
-									objet_type[rel[tempo]].push(data[i]);	
-									}else{
-									objet_type[rel[tempo]] = [data[i]];
-									}
-										
-								}
-							}
-							
-						}			
-			}
-			console.log(objet_type);
-			console.log(Object.keys(objet_type));
-			console.log(Object.values(objet_type));
-		}
-		filtrage(data,objet_type,filtre);
-
-		
-			$("input[name=choix]").change(function(){
-			if($(this).is(':checked')) {
-				cities.clearLayers();
-				var id = $(this).val();
-				console.log(id);
-				var v = objet_type[id];
-				objet_type = {};
-				filtrage(v,objet_type,filtre2);
-				layer(id,v); 
+			function find (d,s){
+				var o =[];
+				for (j=0;j<d.length;j++){
+					if (d[j].fields.nomoffre == s){
+						o.push(d[j]);}
 				}
-				
-			});
+				return o[0];
+			}
+			
+			cities.on("click", function (event) {
+					var clickedMarker = event.layer;
+					console.log(clickedMarker);
+					var sss = find(r,clickedMarker._popup._content);
+					$("#div").show();
+					info(sss);
+					console.log(sss.fields.nomoffre);
+			})
+			
+			
+			salut(r,[4],"capacitenbchambres");
+			cities.clearLayers();
+			
+			layer(r);
 			
 });		
 };
 
 	$('#checkBox').click(function(){
 		if ($('#checkBox').is(':checked')){
-			$("#locatif").show();
 			cities.clearLayers();
 			locatif(cities);
 		}else{
