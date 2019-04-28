@@ -6,28 +6,34 @@ body{
   	background-position: top center; 
 }
 
-form{background-color: #3399ff;
+form{background-color: #f2f2f2;
+	font-family: 'Oswald', sans-serif;
 	padding: 10px 10px 10px 10px;
 	border-radius: 25px;
 	margin-right: 5px;
-	width: 600px;
+	width: 1000px;
 	text-align: left;
 	display:inline-block;
 	}
 
 div#tete{
+	font-family: 'Gugi', cursive;
 	margin-top: 40px;
 	margin-left:25px;
 	margin-bottom: 40px;
-	background-color: #f2f2f2;
+	background-color: #3399ff;
 	padding-bottom: 10px;
 	padding-right: 10px;
 	padding-left: 10px;
 	padding-top: 1px;
 	border-radius: 25px;
-	width: 650px;
+	width: 1050px;
+	height: 234px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   	text-align: center;
 }
 
 
+.form-check-label{
+	padding-right: 10px;
+}

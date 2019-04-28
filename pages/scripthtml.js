@@ -88,14 +88,13 @@ $(document).ready(function() {
 			
 			
 			function etape1(){
-				//$(".etape1").append("<p>Catégorie :</p>");
 				
+				$(".etape1").append("<h3>Type d'hébergement</h3>");
+
 				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape1.length;i++){
-					//$(".etape1").append("<input type='radio' name='etape1' value="+formData.etape1[i].id+">"+formData.etape1[i].lib+"<br>");
 					div.append("<input  class='form-check-input' type='radio' id='inlineRadio"+i+"' name='etape1' value="+formData.etape1[i].id+">");
 					div.append("<label  class='form-check-label' for='inlineRadio"+i+"'>"+formData.etape1[i].lib+"</label>");
-					//$(".etape1").append("</div>")
 				}
 				
 				$(".etape1").append(div);
@@ -111,13 +110,18 @@ $(document).ready(function() {
 
 			function etape2(){
 				$(".etape2").show();
-				$(".etape2").append("<p>Catégorie :</p>");
+
+				$(".etape2").append("<h3>Catégorie de l'hébergement</h3>");
+
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape2[cat].length;i++){
-					$(".etape2").append("<div class='form-check form-check-inline'>")
-					$(".etape2").append("<input class='form-check-input' id='inlineCheckbox"+i+"' type='checkbox' name='etape2' value="+formData.etape2[cat][i].id+">"+formData.etape2[cat][i].lib)
-					$(".etape2").append("</div>")
+					div.append("<input  class='form-check-input' type='checkbox' id='inlineCheckbox"+i+"' name='etape2' value="+formData.etape2[cat][i].id+">");
+					div.append("<label  class='form-check-label' for='inlineCheckbox"+i+"'>"+formData.etape2[cat][i].lib+"</label>");
 				}
-				$(".etape2").append("<input type='button' id='etape2' value='Suivant'>");
+				
+				$(".etape2").append(div);
+				
+				$(".etape2").append("<input type='button' class='btn btn-primary' id='etape2' value='Suivant'>");
 
 				$("#etape2").click(function(){
 					$(".etape2").hide();
@@ -133,17 +137,17 @@ $(document).ready(function() {
 			function etape3(){
 				$(".etape3").show();
 
-				if(cat=='c1'){
-					$(".etape3").append("<p>Hébergement :</p>");
-				} else if(cat=='l1'){
-					$(".etape3").append("<p>Nombre de chambres</p>");
-				}
+				$(".etape3").append("<h3>Vous souhaitez dormir en :</h3>");
 
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape3[cat].length;i++){
-					$(".etape3").append("<input type='checkbox' name='etape3' value="+formData.etape3[cat][i].id+">"+formData.etape3[cat][i].lib+"<br>")
+					div.append("<input  class='form-check-input' type='checkbox' id='inlineCheckbox"+i+"' name='etape3' value="+formData.etape3[cat][i].id+">");
+					div.append("<label  class='form-check-label' for='inlineCheckbox"+i+"'>"+formData.etape3[cat][i].lib+"</label>");
 				}
-
-				$(".etape3").append("<input type='button' id='etape3' value='Suivant'>");
+				
+				$(".etape3").append(div);
+				
+				$(".etape3").append("<input type='button' class='btn btn-primary' id='etape3' value='Suivant'>");
 
 				$("#etape3").click(function(){
 					$(".etape3").hide();
@@ -154,17 +158,17 @@ $(document).ready(function() {
 			function etape4(){
 				$(".etape4").show();
 
-				if(cat=='c1'){
-					$(".etape4").append("<p>Services proposés :</p>");
-				} else if(cat=='l1'){
-					$(".etape4").append("<p>Nombre de personnes :</p>");
-				}
+				$(".etape4").append("<h3>Services disponibles dans votre Camping :</h3>");
 
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape4[cat].length;i++){
-					$(".etape4").append("<input type='checkbox' name='etape4' value="+formData.etape4[cat][i].id+">"+formData.etape4[cat][i].lib+"<br>")
+					div.append("<input  class='form-check-input' type='checkbox' id='inlineCheckbox"+i+"' name='etape4' value="+formData.etape4[cat][i].id+">");
+					div.append("<label  class='form-check-label' for='inlineCheckbox"+i+"'>"+formData.etape4[cat][i].lib+"</label>");
 				}
-
-				$(".etape4").append("<input type='button' id='etape4' value='Suivant'>");
+				
+				$(".etape4").append(div);
+				
+				$(".etape4").append("<input type='button' class='btn btn-primary' id='etape4' value='Suivant'>");
 
 				$("#etape4").click(function(){
 					$(".etape4").hide();
@@ -175,13 +179,17 @@ $(document).ready(function() {
 			function etape5(){
 				$(".etape5").show();
 
-				$(".etape5").append("<p>Catégorie :</p>");
+				$(".etape5").append("<h3>Confort :</h3>");
 
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape5.length;i++){
-					$(".etape5").append("<input type='checkbox' name='etape5' value="+formData.etape5[i].id+">"+formData.etape5[i].lib+"<br>");
+					div.append("<input  class='form-check-input' type='checkbox' id='inlineCheckbox"+i+"' name='etape5' value="+formData.etape5[i].id+">");
+					div.append("<label  class='form-check-label' for='inlineCheckbox"+i+"'>"+formData.etape5[i].lib+"</label>");
 				}
-
-				$(".etape5").append("<input type='button' id='etape5' value='Suivant'>");
+				
+				$(".etape5").append(div);
+				
+				$(".etape5").append("<input type='button' class='btn btn-primary' id='etape5' value='Suivant'>");
 
 				$("#etape5").click(function(){
 					$(".etape5").hide();
@@ -192,18 +200,26 @@ $(document).ready(function() {
 			function etape6(){
 				$(".etape6").show();
 
-				$(".etape6").append("<p>Equipements :</p>");
+				$(".etape6").append("<h3>Équipements :</h3>");
 
+				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape6.length;i++){
-					$(".etape6").append("<input type='checkbox' name='etape6' value="+formData.etape6[i].id+">"+formData.etape6[i].lib+"<br>");
+					div.append("<input  class='form-check-input' type='checkbox' id='inlineCheckbox"+i+"' name='etape6' value="+formData.etape6[i].id+">");
+					div.append("<label  class='form-check-label' for='inlineCheckbox"+i+"'>"+formData.etape6[i].lib+"</label>");
 				}
+				
+				$(".etape6").append(div);
+				$(".etape6").append("<button type='submit' class='btn btn-primary'>Submit</button>");
+				$(".etape6").append("<button type='button' class='btn btn-danger'>Recommencer</button>");
+				
 
-				$(".etape6").append("<input type='button' id='etape6' value='Suivant'>");
+				
+				/*$("#regForm").append("<input type='submit' id='btn1'>");*/
 
-				$("#etape6").click(function(){
+				/*$("#etape6").click(function(){
 					$(".etape6").hide();
 					etape7();
-				});
+				});*/
 			}
 
 			function etape7(){
