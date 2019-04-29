@@ -74,6 +74,33 @@ function createDatabase(){
 }
 
 
+function inNumbers(number, list){
+	for(let item of list){
+		let nb = item.split("+");
+
+		if(nb.length === 1 && number === Number(nb[0])){
+			return true;
+		}else if(nb.length === 2 && number >= Number(nb[0])){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+function inStringList(string, str_list){
+
+	for(let h of str_list){
+		if(string.includes(h)){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 createDatabase();
 
 
@@ -153,21 +180,29 @@ app.post("/sendingData", (req, res) => {
 		case "Hôtel": selected_collection = "hotels"; break;
 	}
 
+	console.log("Etape 1 traitée");
+
 	console.log(selected_collection + " database selected!");
 
 	console.log("DATA SENT:");
 	console.log(data);
 
-	var type_query = []
+	var query = {};
+	
+	if(data.etape2 != undefined){
+		var type_query = [];
 
-	//filtre etape2 (sélection du type)
-	data.etape2.forEach((item) => {
-		type_query.push({"fields.type": item});
-	});
+		//filtre etape2 (sélection du type)
+		data.etape2.forEach((item) => {
+			type_query.push({"fields.type": item});
+		});
+
+		query = {$or : type_query};
+	}
 
 
 	//console.log(type_query);
-	var results;
+	//var results;
 
 	MongoClient.connect(url, { useNewUrlParser: true }, (err, db) => {
 		if (err) throw err;
@@ -175,9 +210,100 @@ app.post("/sendingData", (req, res) => {
 		console.log("Connecting to database...");
 		var dbo = db.db(DB_NAME);
 
-		dbo.collection(selected_collection).find({$or : type_query}, {projection : {_id:0, "fields.type":1}}).toArray((err,res) => {
-			results = res;
-			console.log(res);
+		dbo.collection(selected_collection).find(query, {projection : {_id:0, "fields.type":1, "fields.capacitenbchambres":1, "fields.capacitenbpersonnes": 1, "fields.equipementsenlocation":1, "fields.services":1, "fields.labelsclassement":1, "fields.equipements":1}}).toArray((err,res) => {
+			
+			console.log("Etape 2 traitée");
+			
+			//results = res;
+			console.log(res.length);
+
+
+			switch(data.etape1[0]){
+				case "Hébergements Locatifs": {
+
+					//filtre etape3 sélection du nombre de chambres pour les locatifs
+					if(data.etape3 != undefined){
+						res = res.filter(heb => {
+							return heb.fields.capacitenbchambres != undefined && inNumbers(heb.fields.capacitenbchambres, data.etape3);
+						});
+					}
+					
+					console.log("Etape 3 traitée");
+					console.log(res.length);
+
+					//filtre etape4 sélection du nombre de personnes
+					if(data.etape4 != undefined){
+						res = res.filter(heb => {
+							return heb.fields.capacitenbpersonnes != undefined && inNumbers(heb.fields.capacitenbpersonnes, data.etape4);
+						});
+
+					}
+					
+					console.log("Etape 4 traitée");
+					console.log(res.length);
+
+				} break;
+				
+				case "Camping": {
+
+					//filtre etape3 sélection des hébergements pour les campings
+					if(data.etape3 != undefined){
+						res = res.filter(heb => {
+							return heb.fields.equipementsenlocation != undefined && inStringList(heb.fields.equipementsenlocation, data.etape3);
+						});
+					}
+
+					console.log("Etape 3 traitée");
+					console.log(res.length);
+
+					//filtre etape4 sélection des services disponibles pour les campings
+					if(data.etape4 != undefined){
+						res = res.filter(heb => {
+							return heb.fields.services != undefined && inStringList(heb.fields.services, data.etape4);
+						});
+					}
+
+					console.log("Etape 4 traitée");
+					console.log(res.length);
+
+				} break;
+			}
+
+			//filtre etape5 (sélection du nombre d'étoiles de l'hébergement)
+			if(data.etape5 != undefined){
+				res = res.filter(heb => {
+					if(heb.fields.labelsclassement === undefined){return false;}
+
+					heb_rating = heb.fields.labelsclassement.match(/\d+/g);
+					for(let rating of data.etape5){
+						if(rating.includes(heb_rating)){
+							return true;
+						}
+					}
+
+					return false;
+				});
+			}
+
+
+			console.log("Etape 5 traitée");
+			console.log(res.length);
+
+			//filtre etape6 (sélection des équipements)
+			if(data.etape6 != undefined){
+				res = res.filter(heb => {
+					return heb.fields.equipements != undefined && inStringList(heb.fields.equipements, data.etape6);
+				});
+			}
+
+			console.log("Etape 6 traitée");
+			console.log(res.length);
+
+			//filtre etape7_1 (sélection du département)
+
+			//filtre etape7_2 ???
+
+			//filtre etape7_3 (sélection de la ville)
 		});
 
 		
@@ -185,19 +311,7 @@ app.post("/sendingData", (req, res) => {
 
 
 
-	//filtre etape3 (sélection du nombre de chambres pour les locatifs, hébergements pour les campings)
-
-	//filtre etape4 (sélection du nombre de personnes pour les locatifs, services disponibles pour les campings)
-
-	//filtre etape5 (sélection du nombre d'étoiles de l'hébergement)
-
-	//filtre etape6 (sélection des équipements)
-
-	//filtre etape7_1 (sélection du département)
-
-	//filtre etape7_2 ???
-
-	//filtre etape7_3 (sélection de la ville)
+	
 
 	res.send();
 

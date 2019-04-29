@@ -5,7 +5,7 @@ formData = {
 		{id:'l1', lib:'Hébergements Locatifs'}
 		],
 	etape2: {
-		'h1': [{id:'h', lib:'Hôtel'},{id:'hr',lib:'Hôtel-Restaurant'}],
+		'h1': [{id:'h', lib:'Hôtel'},{id:'hr',lib:'Hôtel - Restaurant'}],
 		'c1': [{id:'ct', lib:'Camp de tourisme'},{id:'cl', lib:'Camp de loisirs'},{id:'cf', lib:'Camping à la ferme'},{id:'an', lib:'Aire naturelle'},{id:'pl', lib:'Parc résidentiel de loisirs'}],
 		'l1': [{id:'m', lib:'Meublés'},{id:'ch', lib: 'Chambre d\'hôtes'},{id:'hl', lib:'Hébergement insolite'},{id:'lc', lib:'Locatif sur camping'},{id:'ai', lib:'Agence immobilière'},{id:'vl', lib:'Village locatif'},{id:'b', lib:'Bateau'}]
 		},
