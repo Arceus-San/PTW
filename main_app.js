@@ -137,7 +137,7 @@ app.post("/add", (req,res) => {
 });
 
 
-app.post("/sendingData", (req, res) => {
+app.post("/sendingData", (req, result) => {
 
 	var data = req.body;
 
@@ -210,7 +210,7 @@ app.post("/sendingData", (req, res) => {
 		console.log("Connecting to database...");
 		var dbo = db.db(DB_NAME);
 
-		dbo.collection(selected_collection).find(query, {projection : {_id:0, "fields.type":1, "fields.capacitenbchambres":1, "fields.capacitenbpersonnes": 1, "fields.equipementsenlocation":1, "fields.services":1, "fields.labelsclassement":1, "fields.equipements":1}}).toArray((err,res) => {
+		dbo.collection(selected_collection).find(query).toArray((err,res) => {
 			
 			console.log("Etape 2 traitée");
 			
@@ -304,16 +304,15 @@ app.post("/sendingData", (req, res) => {
 			//filtre etape7_2 ???
 
 			//filtre etape7_3 (sélection de la ville)
+
+			result.send(res);
+			db.close();
 		});
 
 		
 	});
 
-
-
 	
-
-	res.send();
 
 });
 
