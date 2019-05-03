@@ -2,7 +2,7 @@ body{
 	font-family: 'Roboto', sans-serif;
 	background-image: url("style/background2.jpg");
 	background-repeat: no-repeat;
-  	background-attachment: fixed;
+  	background-attachment: scroll;
   	background-position: top center; 
 }
 
