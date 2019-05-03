@@ -247,6 +247,7 @@ $(document).ready(function() {
 			etape1();
 			
 			$("#div").hide();
+			$("#Act").hide();
 		var cities = L.featureGroup();
 		var r = [];
 			function notation_stars(nb){
@@ -303,8 +304,59 @@ $(document).ready(function() {
 				return o[0];
 			}
 			
-
-
+function activites () {
+		$.getJSON('activites.json',function(data1){
+		var acts = []
+		function database(){
+		for (i=0;i<data1.length;i++){
+		acts.push(data1[i].fields["nomoffre"]);}
+		};
+		database();
+		console.log("activités",acts);
+		
+		});
+		$.getJSON('degustations.json',function(data2){
+		var degus = []
+		function database(){
+			for (i=0;i<data2.length;i++){
+			degus.push(data2[i].fields["nomoffre"]);}
+		};
+		database();
+		console.log("degustations",degus);
+		});
+		$.getJSON('patrimoine.json',function(data3){
+		var pat = []
+		function database(){
+			for (i=0;i<data3.length;i++){
+			pat.push(data3[i].fields["nomoffre"]);}
+		};
+		database();
+		console.log("patrimoine",pat);
+		});
+		
+		/*new Chart(document.getElementById("bar-chart"), {
+			type: 'bar',
+			data: {
+			  labels: Object.keys(objet_type),
+			  datasets: [
+				{
+				  label: "Activités",
+				  backgroundColor: [],
+				  data: Object.values(objet_type)
+				}
+			  ]
+			},
+			options: {
+			  legend: { display: true },
+			  title: {
+				display: true,
+				text: 'Type d`habitation au Pays de la Loire'
+			  }
+			}
+		});*/
+		
+}
+activites();
 function hotel(cities){
 				////////////////////////////////////////////////////
 			$.getJSON('hôtel.json',function(data){
@@ -475,7 +527,6 @@ function locatif(cities){
 
 });		
 };
-
 			cities.on("click", function (event) {
 					var clickedMarker = event.layer;
 					console.log("marker",clickedMarker);
@@ -484,7 +535,20 @@ function locatif(cities){
 					$("#div").show();
 					info(sss);
 					console.log(sss.fields.nomoffre);
+					macarte.setView([event.latlng.lat, event.latlng.lng+0.4], 10);
+					var latlngs = [[event.latlng.lat-0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng-0.5],[event.latlng.lat-0.2, event.latlng.lng-0.5]];
+					var polygon = L.polygon(latlngs,{opacity : 0.01})
+					if (macarte.hasLayer(polygon)){
+						console.log("sala");
+						macarte.removeLayer(polygon);
+						var latlngs = [[event.latlng.lat-0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng-0.5],[event.latlng.lat-0.2, event.latlng.lng-0.5]];
+						var polygon = L.polygon(latlngs,{opacity : 0.01}).addTo(macarte);}
+					else{
+						polygon.addTo(macarte);
+					}
 			})
+			
+
 
 	$('input[name=Choix1]').change(function(){
     if($(this).is(':checked')) {
@@ -512,6 +576,41 @@ function locatif(cities){
         cities.clearLayers();
     }
 });
+
+	$('input[name=Description]').click(function(){
+		if ($(this).disabled ){
+		}
+		else{
+			$(this).css("background-color","black");
+			$(this).css("color","white");
+			$(this).css("border-color","black");
+			$('input[name=Activités]').removeAttr("disabled");
+			$('input[name=Activités]').css("background-color","white");
+			$('input[name=Activités]').css("color","black");
+			$('input[name=Activités]').css("border-color","black");
+			$(this).attr("disabled","disabled");
+			$("#Des").show();
+			$("#Act").hide();
+		}
+	});
+	
+		$('input[name=Activités]').click(function(){
+		if ($(this).disabled ){
+		}
+		else{
+			$(this).css("background-color","black");
+			$(this).css("color","white");
+			$(this).css("border-color","black");
+			$('input[name=Description]').removeAttr("disabled");
+			$('input[name=Description]').css("background-color","white");
+			$('input[name=Description]').css("color","black");
+			$('input[name=Description]').css("border-color","black");
+			$(this).attr("disabled","disabled");
+			$("#Des").hide();
+			$("#Act").show();
+		}
+	});
+	
 
 			// On initialise la latitude et la longitude de Paris (centre de la carte)
 			var lat = 47.361903;
@@ -547,6 +646,5 @@ function locatif(cities){
 					layers: [fond,cities]
 				});
 				L.control.layers(baseLayers,overlays).addTo(macarte);
-
-				
+			
 });
