@@ -248,58 +248,7 @@ $(document).ready(function() {
 			
 			$("#div").hide();
 		var cities = L.featureGroup();
-		function hotel(cities){
-			$.getJSON('hôtel.json',function(data){
-					var objet_type = {};
-			
-			function layer(id,val,Icon){
-			for (i=0;i<val.length;i++){
-				var nom = val[i].fields.nomoffre;
-				var coor = val[i].geometry.coordinates;
-				var coor2 = [coor[1],coor[0]];
-				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id)
-				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
-				}
-				console.log(cities);
-<!-- 				overlays[C]=cities; -->
-			}
-
-			
-			$("#checkBox1").change(function(){
-			if($(this).is(':checked')) {
-				cities.clearLayers();
-				var valeur = $(this).val();
-				var id = valeur ;
-				var val = data;
-				var Icon = L.icon({
-				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25]
-				});
-				layer(id,val,Icon); 
-				}
-			});
-			
-});		
-};
-
-		function locatif(cities){
-			$.getJSON('locatif.json',function(data){
-			var filtre = "type"; 
-			var filtre2 ="capacitenbchambres";
-			var r = [];
-			function salut(d,c,fil){
-			r = [];
-			for (i=0;i<d.length;i++){
-				for (j=0;j<c.length;j++){
-					if (d[i].fields[fil] == c[j]){
-						r.push(d[i]);
-					} 
-				}
-			}
-			console.log(r);
-			}
-			salut(data,["Meublés"],"type");
-			
+		var r = [];
 			function notation_stars(nb){
 				var cat = nb.split(" ")[0];
 				console.log(cat);
@@ -327,6 +276,9 @@ $(document).ready(function() {
 				var codepostal = val.fields.codepostal;
 				var tel = val.fields.commtel;
 				var siteweb = val.fields.commweb;
+				if (typeof categorie == 'undefined'){
+					categorie = "0";
+				}
 				notation_stars(categorie);
 				if (typeof siteweb == 'undefined'){
 					siteweb = "Pas de site web";
@@ -342,6 +294,154 @@ $(document).ready(function() {
 				
 				
 			};
+		function find (d,s){
+				var o =[];
+				for (j=0;j<d.length;j++){
+					if (d[j].fields.nomoffre == s){
+						o.push(d[j]);}
+				}
+				return o[0];
+			}
+			
+
+
+function hotel(cities){
+				////////////////////////////////////////////////////
+			$.getJSON('hôtel.json',function(data){
+		r = [];
+		function database(){
+		for (i=0;i<data.length;i++){
+					r.push(data[i]);}
+		};
+		database();
+		///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+					} 
+				}
+			}
+			
+			console.log("salut",r);
+			}
+			
+			
+			function layer(id,val,Icon){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+			}
+
+			
+			$("#checkBox1").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var valeur = $(this).val();
+				var id = valeur ;
+				var val = data;
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+valeur+'.png',
+				iconSize:     [18, 25]
+				});
+				layer(id,val,Icon); 
+				}
+			});
+			
+			
+});		
+};
+
+function camping(cities){
+			////////////////////////////////////////////////////
+			$.getJSON('campings.json',function(data){
+		r = [];
+		function database(){
+		for (i=0;i<data.length;i++){
+					r.push(data[i]);}
+		};
+		database();
+			///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+					} 
+				}
+			}
+			
+			console.log("salut",r);
+			}
+			
+			function layer(id,val,Icon){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+
+			}
+
+			
+			$("#checkBox2").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var valeur = $(this).val();
+				var id = valeur ;
+				var val = r;
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+valeur+'.png',
+				iconSize:     [18, 25]
+				});
+				layer(id,val,Icon); 
+				}
+			});
+			
+			
+
+			
+});		
+};
+
+function locatif(cities){
+			////////////////////////////////////////////////////
+			$.getJSON('locatif.json',function(data){
+			var filtre = "type"; 
+			var filtre2 ="capacitenbchambres";
+			r = [];
+			
+			///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<=c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+						
+					} 
+				}
+			}
+			console.log("salut",r);
+			}
+			
+			salut(data,["Meublés"],"type");
+			
+
 			
 			
 			function layer(val){
@@ -363,48 +463,56 @@ $(document).ready(function() {
 				var popup = L.popup().setContent(nom);
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
 				}
-				console.log(cities);
-<!-- 				
+				console.log(cities);				
 			}
-			layer(r);  
+			layer(r);
+
+			salut(r,[4],"capacitenbchambres");
+			cities.clearLayers();
 			
-			function find (d,s){
-				var o =[];
-				for (j=0;j<d.length;j++){
-					if (d[j].fields.nomoffre == s){
-						o.push(d[j]);}
-				}
-				return o[0];
-			}
-			
+			layer(r);
+			Cat = r ;
+
+});		
+};
+
 			cities.on("click", function (event) {
 					var clickedMarker = event.layer;
-					console.log(clickedMarker);
+					console.log("marker",clickedMarker);
+					console.log("r",r);
 					var sss = find(r,clickedMarker._popup._content);
 					$("#div").show();
 					info(sss);
 					console.log(sss.fields.nomoffre);
 			})
-			
-			
-			salut(r,[4],"capacitenbchambres");
-			cities.clearLayers();
-			
-			layer(r);
-			
-});		
-};
 
-	$('#checkBox').click(function(){
-		if ($('#checkBox').is(':checked')){
-			cities.clearLayers();
+	$('input[name=Choix1]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
 			locatif(cities);
-		}else{
-			$("#locatif").hide();
-			cities.clearLayers();
+    } else {
+        cities.clearLayers();
+    }
+});
+
+	$('input[name=Choix2]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
 			hotel(cities);
-		}
-		});
+    } else {
+        cities.clearLayers();
+    }
+});
+
+	$('input[name=Choix3]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
+			camping(cities);
+    } else {
+        cities.clearLayers();
+    }
+});
+
 			// On initialise la latitude et la longitude de Paris (centre de la carte)
 			var lat = 47.361903;
 			var lon = -0.861994;
