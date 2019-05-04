@@ -303,15 +303,68 @@ $(document).ready(function() {
 				}
 				return o[0];
 			}
+		function layer(val){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+			}
+var acts_aut = [];	
+var degus_aut =[];
+var pat_aut = [];		
+var data_gra =[];
+		function find_act(lat,lng,act,acts_autour){
+			for (i=0;i<act.length;i++){
+				var coor = act[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				if ((coor2[0]<lat[1] && coor2[0]>lat[0]) && (coor2[1]>lng[1] && coor2[1]<lng[0])){
+					acts_autour.push(act[i]);
+				
+			}
+			}		
 			
-function activites () {
+}
+function graphique(longu){
+		new Chart(document.getElementById("bar-chart"), {
+			type: 'bar',
+			data: {
+			labels: ['Patrimoine','Dégustations','Activités'],
+			  datasets: [
+				{
+				  label: "Activités",
+				  backgroundColor: ["red","blue","green"],
+				  data: longu
+				}				
+			  ]
+			},
+			options: {
+			  legend: { display: true },
+			  title: {
+				display: true,
+				text: 'Activités autours'
+			  }
+			}
+		});
+
+
+}	
+function activites (lats,lngs) {
+
 		$.getJSON('activites.json',function(data1){
 		var acts = []
+		
 		function database(){
 		for (i=0;i<data1.length;i++){
 		acts.push(data1[i].fields["nomoffre"]);}
 		};
 		database();
+		find_act(lats,lngs,data1,acts_aut);
+		console.log(acts_aut);
+		data_gra.push(acts_aut.length);
 		console.log("activités",acts);
 		
 		});
@@ -322,6 +375,9 @@ function activites () {
 			degus.push(data2[i].fields["nomoffre"]);}
 		};
 		database();
+		find_act(lats,lngs,data2,degus_aut);
+		console.log(degus_aut);
+		data_gra.push(degus_aut.length);
 		console.log("degustations",degus);
 		});
 		$.getJSON('patrimoine.json',function(data3){
@@ -331,32 +387,16 @@ function activites () {
 			pat.push(data3[i].fields["nomoffre"]);}
 		};
 		database();
+		find_act(lats,lngs,data3,pat_aut);
+		console.log(pat_aut);
+		data_gra.push(pat_aut.length);
 		console.log("patrimoine",pat);
 		});
+		graphique(data_gra);
 		
-		/*new Chart(document.getElementById("bar-chart"), {
-			type: 'bar',
-			data: {
-			  labels: Object.keys(objet_type),
-			  datasets: [
-				{
-				  label: "Activités",
-				  backgroundColor: [],
-				  data: Object.values(objet_type)
-				}
-			  ]
-			},
-			options: {
-			  legend: { display: true },
-			  title: {
-				display: true,
-				text: 'Type d`habitation au Pays de la Loire'
-			  }
-			}
-		});*/
 		
 }
-activites();
+
 function hotel(cities){
 				////////////////////////////////////////////////////
 			$.getJSON('hôtel.json',function(data){
@@ -527,6 +567,8 @@ function locatif(cities){
 
 });		
 };
+
+
 			cities.on("click", function (event) {
 					var clickedMarker = event.layer;
 					console.log("marker",clickedMarker);
@@ -534,18 +576,12 @@ function locatif(cities){
 					var sss = find(r,clickedMarker._popup._content);
 					$("#div").show();
 					info(sss);
-					console.log(sss.fields.nomoffre);
 					macarte.setView([event.latlng.lat, event.latlng.lng+0.4], 10);
-					var latlngs = [[event.latlng.lat-0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng-0.5],[event.latlng.lat-0.2, event.latlng.lng-0.5]];
-					var polygon = L.polygon(latlngs,{opacity : 0.01})
-					if (macarte.hasLayer(polygon)){
-						console.log("sala");
-						macarte.removeLayer(polygon);
-						var latlngs = [[event.latlng.lat-0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng+0.5],[event.latlng.lat+0.2, event.latlng.lng-0.5],[event.latlng.lat-0.2, event.latlng.lng-0.5]];
-						var polygon = L.polygon(latlngs,{opacity : 0.01}).addTo(macarte);}
-					else{
-						polygon.addTo(macarte);
-					}
+					var lats = [event.latlng.lat-0.2,event.latlng.lat+0.2];
+					var lngs = [event.latlng.lng+0.5,event.latlng.lng-0.5];
+					activites(lats,lngs);
+					
+					
 			})
 			
 
