@@ -23,6 +23,7 @@ $(document).ready(function() {
 				trad1=ser.split("&");
 				traduction();
 				console.log(result);
+				tri_form(result);
 				
 			});
 			
@@ -406,7 +407,7 @@ function activites (lats,lngs) {
 		
 }
 
-function hotel(cities){
+function hotel(cities,filtre){
 				////////////////////////////////////////////////////
 			$.getJSON('hôtel.json',function(data){
 		r = [];
@@ -419,17 +420,24 @@ function hotel(cities){
 			//Request 
 		function salut(d,c,fil){
 			r = [];
+			if (c.length != 0){
 			for (i=0;i<d.length;i++){
-				for (j=0;j<c.length;j++){
+				for (j=0;j<=c.length;j++){
 					if (d[i].fields[fil] == c[j]){
 						r.push(d[i]);
+						
 					} 
 				}
 			}
-			
+			}else {
+				r=d;
+			}
 			console.log("salut",r);
 			}
-			
+			salut(data,filtre[1],"type");
+			salut(data,filtre[2],"categorie");
+			salut(data,filtre[3],"equipement");
+			layer(r);
 			
 			function layer(id,val,Icon){
 			for (i=0;i<val.length;i++){
@@ -461,7 +469,7 @@ function hotel(cities){
 });		
 };
 
-function camping(cities){
+function camping(cities,filtre){
 			////////////////////////////////////////////////////
 			$.getJSON('campings.json',function(data){
 		r = [];
@@ -474,16 +482,28 @@ function camping(cities){
 			//Request 
 		function salut(d,c,fil){
 			r = [];
+			if (c.length != 0){
 			for (i=0;i<d.length;i++){
-				for (j=0;j<c.length;j++){
+				for (j=0;j<=c.length;j++){
 					if (d[i].fields[fil] == c[j]){
 						r.push(d[i]);
+						
 					} 
 				}
 			}
-			
+			}else {
+				r=d;
+			}
 			console.log("salut",r);
 			}
+			salut(data,filtre[1],"type");
+			salut(data,filtre[2],"equipementsenlocation");
+			salut(data,filtre[3],"services");
+			salut(data,filtre[4],"categorie");
+			salut(data,filtre[4],"equipements");
+			layer(r);
+			
+			
 			
 			function layer(id,val,Icon){
 			for (i=0;i<val.length;i++){
@@ -518,17 +538,16 @@ function camping(cities){
 });		
 };
 
-function locatif(cities){
+function locatif(cities,filtre){
 			////////////////////////////////////////////////////
 			$.getJSON('locatif.json',function(data){
-			var filtre = "type"; 
-			var filtre2 ="capacitenbchambres";
 			r = [];
 			
 			///////////////////////////////////////////////////
 			//Request 
 		function salut(d,c,fil){
 			r = [];
+			if (c.length != 0){
 			for (i=0;i<d.length;i++){
 				for (j=0;j<=c.length;j++){
 					if (d[i].fields[fil] == c[j]){
@@ -537,12 +556,16 @@ function locatif(cities){
 					} 
 				}
 			}
+			}else {
+				r=d;
+			}
 			console.log("salut",r);
 			}
-			
-			salut(data,["Meublés"],"type");
-			
-			
+			salut(data,filtre[1],"type");
+			salut(r,filtre[2],"capacitenbpersonnes");
+			salut(r,filtre[3],"capacitenbchambres");
+			salut(r,filtre[4],"categorie");
+			salut(r,filtre[5],"equipements");
 			
 			function layer(val){
 			for (i=0;i<val.length;i++){
@@ -568,11 +591,9 @@ function locatif(cities){
 			}
 			layer(r);
 
-			salut(r,[4],"capacitenbchambres");
-			cities.clearLayers();
 			
-			layer(r);
-			Cat = r ;
+			
+
 
 });		
 };
@@ -592,6 +613,21 @@ function locatif(cities){
 					
 					
 			})
+			
+	function tri_form(result){
+			var val = Object.values(result);
+			console.log(val);
+			if (val[0] == "Hôtel"){
+				hotel(cities,val);
+			}
+			if (val[0] == "Camping"){
+				camping(cities,val);
+			}	
+			if (val[0] == "Hébergements Locatifs"){
+				locatif(cities,val);
+			}
+		
+	}
 			
 
 
