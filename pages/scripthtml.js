@@ -137,7 +137,11 @@ $(document).ready(function() {
 			function etape3(){
 				$(".etape3").show();
 
-				$(".etape3").append("<h3>Vous souhaitez dormir en :</h3>");
+				if(cat=='c1'){
+					$(".etape3").append("<h3>Vous souhaitez dormir en :</h3>");
+				}else{
+					$(".etape3").append("<h3>Nombre de personnes :</h3>");
+				}
 
 				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape3[cat].length;i++){
@@ -158,7 +162,12 @@ $(document).ready(function() {
 			function etape4(){
 				$(".etape4").show();
 
-				$(".etape4").append("<h3>Services disponibles dans votre Camping :</h3>");
+				if(cat=='c1'){
+					$(".etape4").append("<h3>Services disponibles dans votre Camping :</h3>");
+				}else{
+					$(".etape4").append("<h3>Nombre de chambres :</h3>");
+				}
+
 
 				var div=$("<div class='form-check form-check-inline'>");
 				for(var i=0;i<formData.etape4[cat].length;i++){
@@ -210,7 +219,7 @@ $(document).ready(function() {
 				
 				$(".etape6").append(div);
 				$(".etape6").append("<button type='submit' class='btn btn-primary'>Submit</button>");
-				$(".etape6").append("<button type='button' class='btn btn-danger'>Recommencer</button>");
+				/*$(".etape6").append("<button type='button' class='btn btn-danger'>Recommencer</button>");*/
 				
 
 				
@@ -247,59 +256,9 @@ $(document).ready(function() {
 			etape1();
 			
 			$("#div").hide();
+			$("#Act").hide();
 		var cities = L.featureGroup();
-		function hotel(cities){
-			$.getJSON('hôtel.json',function(data){
-					var objet_type = {};
-			
-			function layer(id,val,Icon){
-			for (i=0;i<val.length;i++){
-				var nom = val[i].fields.nomoffre;
-				var coor = val[i].geometry.coordinates;
-				var coor2 = [coor[1],coor[0]];
-				var popup = L.popup().setContent("<br>"+"<b>"+nom+"</b>"+"</br>" + id)
-				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
-				}
-				console.log(cities);
-<!-- 				overlays[C]=cities; -->
-			}
-
-			
-			$("#checkBox1").change(function(){
-			if($(this).is(':checked')) {
-				cities.clearLayers();
-				var valeur = $(this).val();
-				var id = valeur ;
-				var val = data;
-				var Icon = L.icon({
-				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25]
-				});
-				layer(id,val,Icon); 
-				}
-			});
-			
-});		
-};
-
-		function locatif(cities){
-			$.getJSON('locatif.json',function(data){
-			var filtre = "type"; 
-			var filtre2 ="capacitenbchambres";
-			var r = [];
-			function salut(d,c,fil){
-			r = [];
-			for (i=0;i<d.length;i++){
-				for (j=0;j<c.length;j++){
-					if (d[i].fields[fil] == c[j]){
-						r.push(d[i]);
-					} 
-				}
-			}
-			console.log(r);
-			}
-			salut(data,["Meublés"],"type");
-			
+		var r = [];
 			function notation_stars(nb){
 				var cat = nb.split(" ")[0];
 				console.log(cat);
@@ -327,6 +286,9 @@ $(document).ready(function() {
 				var codepostal = val.fields.codepostal;
 				var tel = val.fields.commtel;
 				var siteweb = val.fields.commweb;
+				if (typeof categorie == 'undefined'){
+					categorie = "0";
+				}
 				notation_stars(categorie);
 				if (typeof siteweb == 'undefined'){
 					siteweb = "Pas de site web";
@@ -339,88 +301,247 @@ $(document).ready(function() {
 				$("#pd").append("<img src='Icons_markers/tel.png' style='padding:5px;'>"+tel+"<br>");
 				
 				
-				function getRandomInt(max) {
-  				return Math.floor(Math.random() * Math.floor(max));
-				}
-
-				var sport = getRandomInt(50);
-				var patrimoine = getRandomInt(50);
-				var degustation = getRandomInt(50);
-
-				var margin = {top: 40, right: 20, bottom: 30, left: 40},
-				    width = 200 - margin.left - margin.right,
-				    height = 100 - margin.top - margin.bottom;
-
-				var formatPercent = d3.format(".0%");
-
-				var x = d3.scale.ordinal()
-				    .rangeRoundBands([0, width], .1);
-
-				var y = d3.scale.linear()
-				    .range([height, 0]);
-
-				var xAxis = d3.svg.axis()
-				    .scale(x)
-				    .orient("bottom");
-
-				var yAxis = d3.svg.axis()
-				    .scale(y)
-				    .orient("left")
-				    .tickFormat(formatPercent);
-
-				var tip = d3.tip()
-				  .attr('class', 'd3-tip')
-				  .offset([-10, 0])
-				  .html(function(d) {
-				    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
-				  })
-
-				var svg = d3.select("#pd").append("svg")
-				    .attr("width", width + margin.left + margin.right)
-				    .attr("height", height + margin.top + margin.bottom)
-				  .append("g")
-				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-				svg.call(tip);
-
-				d3.tsv("data.tsv", type, function(error, data) {
-				  x.domain(data.map(function(d) { return d.letter; }));
-				  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
-
-				  svg.append("g")
-				      .attr("class", "x axis")
-				      .attr("transform", "translate(0," + height + ")")
-				      .call(xAxis);
-
-				  svg.append("g")
-				      .attr("class", "y axis")
-				      .call(yAxis)
-				    .append("text")
-				      .attr("transform", "rotate(-90)")
-				      .attr("y", 6)
-				      .attr("dy", ".71em")
-				      .style("text-anchor", "end")
-				      .text("Frequency");
-
-				  svg.selectAll(".bar")
-				      .data(data)
-				    .enter().append("rect")
-				      .attr("class", "bar")
-				      .attr("x", function(d) { return x(d.letter); })
-				      .attr("width", x.rangeBand())
-				      .attr("y", function(d) { return y(d.frequency); })
-				      .attr("height", function(d) { return height - y(d.frequency); })
-				      .on('mouseover', tip.show)
-				      .on('mouseout', tip.hide)
-
-				});
-
-				function type(d) {
-				  d.frequency = +d.frequency;
-				  return d;
-				}
+				
 				
 			};
+		function find (d,s){
+				var o =[];
+				for (j=0;j<d.length;j++){
+					if (d[j].fields.nomoffre == s){
+						o.push(d[j]);}
+				}
+				return o[0];
+			}
+		function layer(val){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+			}
+var acts_aut = [];	
+var degus_aut =[];
+var pat_aut = [];		
+var data_gra =[];
+		function find_act(lat,lng,act,acts_autour){
+			for (i=0;i<act.length;i++){
+				var coor = act[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				if ((coor2[0]<lat[1] && coor2[0]>lat[0]) && (coor2[1]>lng[1] && coor2[1]<lng[0])){
+					acts_autour.push(act[i]);
+				
+			}
+			}		
+			
+}
+function graphique(longu){
+		new Chart(document.getElementById("bar-chart"), {
+			type: 'bar',
+			data: {
+			labels: ['Patrimoine','Dégustations','Activités'],
+			  datasets: [
+				{
+				  label: "Activités",
+				  backgroundColor: ["red","blue","green"],
+				  data: longu
+				}				
+			  ]
+			},
+			options: {
+			  legend: { display: true },
+			  title: {
+				display: true,
+				text: 'Activités autours'
+			  }
+			}
+		});
+
+
+}	
+function activites (lats,lngs) {
+
+		$.getJSON('activites.json',function(data1){
+		var acts = []
+		
+		function database(){
+		for (i=0;i<data1.length;i++){
+		acts.push(data1[i].fields["nomoffre"]);}
+		};
+		database();
+		find_act(lats,lngs,data1,acts_aut);
+		console.log(acts_aut);
+		data_gra.push(acts_aut.length);
+		console.log("activités",acts);
+		
+		});
+		$.getJSON('degustations.json',function(data2){
+		var degus = []
+		function database(){
+			for (i=0;i<data2.length;i++){
+			degus.push(data2[i].fields["nomoffre"]);}
+		};
+		database();
+		find_act(lats,lngs,data2,degus_aut);
+		console.log(degus_aut);
+		data_gra.push(degus_aut.length);
+		console.log("degustations",degus);
+		});
+		$.getJSON('patrimoine.json',function(data3){
+		var pat = []
+		function database(){
+			for (i=0;i<data3.length;i++){
+			pat.push(data3[i].fields["nomoffre"]);}
+		};
+		database();
+		find_act(lats,lngs,data3,pat_aut);
+		console.log(pat_aut);
+		data_gra.push(pat_aut.length);
+		console.log("patrimoine",pat);
+		});
+		graphique(data_gra);
+		
+		
+}
+
+function hotel(cities){
+				////////////////////////////////////////////////////
+			$.getJSON('hôtel.json',function(data){
+		r = [];
+		function database(){
+		for (i=0;i<data.length;i++){
+					r.push(data[i]);}
+		};
+		database();
+		///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+					} 
+				}
+			}
+			
+			console.log("salut",r);
+			}
+			
+			
+			function layer(id,val,Icon){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+			}
+
+			
+			$("#checkBox1").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var valeur = $(this).val();
+				var id = valeur ;
+				var val = data;
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+valeur+'.png',
+				iconSize:     [18, 25]
+				});
+				layer(id,val,Icon); 
+				}
+			});
+			
+			
+});		
+};
+
+function camping(cities){
+			////////////////////////////////////////////////////
+			$.getJSON('campings.json',function(data){
+		r = [];
+		function database(){
+		for (i=0;i<data.length;i++){
+					r.push(data[i]);}
+		};
+		database();
+			///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+					} 
+				}
+			}
+			
+			console.log("salut",r);
+			}
+			
+			function layer(id,val,Icon){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
+				}
+				console.log(cities);
+
+			}
+
+			
+			$("#checkBox2").change(function(){
+			if($(this).is(':checked')) {
+				cities.clearLayers();
+				var valeur = $(this).val();
+				var id = valeur ;
+				var val = r;
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+valeur+'.png',
+				iconSize:     [18, 25]
+				});
+				layer(id,val,Icon); 
+				}
+			});
+			
+			
+
+			
+});		
+};
+
+function locatif(cities){
+			////////////////////////////////////////////////////
+			$.getJSON('locatif.json',function(data){
+			var filtre = "type"; 
+			var filtre2 ="capacitenbchambres";
+			r = [];
+			
+			///////////////////////////////////////////////////
+			//Request 
+		function salut(d,c,fil){
+			r = [];
+			for (i=0;i<d.length;i++){
+				for (j=0;j<=c.length;j++){
+					if (d[i].fields[fil] == c[j]){
+						r.push(d[i]);
+						
+					} 
+				}
+			}
+			console.log("salut",r);
+			}
+			
+			salut(data,["Meublés"],"type");
+			
 			
 			
 			function layer(val){
@@ -443,46 +564,99 @@ $(document).ready(function() {
 				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
 				}
 				console.log(cities);
+
 			}
-			layer(r);  
-			
-			function find (d,s){
-				var o =[];
-				for (j=0;j<d.length;j++){
-					if (d[j].fields.nomoffre == s){
-						o.push(d[j]);}
-				}
-				return o[0];
-			}
-			
-			cities.on("click", function (event) {
-					var clickedMarker = event.layer;
-					console.log(clickedMarker);
-					var sss = find(r,clickedMarker._popup._content);
-					$("#div").show();
-					info(sss);
-					console.log(sss.fields.nomoffre);
-			})
-			
-			
+			layer(r);
+
 			salut(r,[4],"capacitenbchambres");
 			cities.clearLayers();
 			
 			layer(r);
-			
+			Cat = r ;
+
 });		
 };
 
-	$('#checkBox').click(function(){
-		if ($('#checkBox').is(':checked')){
-			cities.clearLayers();
+
+			cities.on("click", function (event) {
+					var clickedMarker = event.layer;
+					console.log("marker",clickedMarker);
+					console.log("r",r);
+					var sss = find(r,clickedMarker._popup._content);
+					$("#div").show();
+					info(sss);
+					macarte.setView([event.latlng.lat, event.latlng.lng+0.4], 10);
+					var lats = [event.latlng.lat-0.2,event.latlng.lat+0.2];
+					var lngs = [event.latlng.lng+0.5,event.latlng.lng-0.5];
+					activites(lats,lngs);
+					
+					
+			})
+			
+
+
+	$('input[name=Choix1]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
 			locatif(cities);
-		}else{
-			$("#locatif").hide();
-			cities.clearLayers();
+    } else {
+        cities.clearLayers();
+    }
+});
+
+	$('input[name=Choix2]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
 			hotel(cities);
+    } else {
+        cities.clearLayers();
+    }
+});
+
+	$('input[name=Choix3]').change(function(){
+    if($(this).is(':checked')) {
+        	cities.clearLayers();
+			camping(cities);
+    } else {
+        cities.clearLayers();
+    }
+});
+
+	$('input[name=Description]').click(function(){
+		if ($(this).disabled ){
 		}
-		});
+		else{
+			$(this).css("background-color","black");
+			$(this).css("color","white");
+			$(this).css("border-color","black");
+			$('input[name=Activités]').removeAttr("disabled");
+			$('input[name=Activités]').css("background-color","white");
+			$('input[name=Activités]').css("color","black");
+			$('input[name=Activités]').css("border-color","black");
+			$(this).attr("disabled","disabled");
+			$("#Des").show();
+			$("#Act").hide();
+		}
+	});
+	
+		$('input[name=Activités]').click(function(){
+		if ($(this).disabled ){
+		}
+		else{
+			$(this).css("background-color","black");
+			$(this).css("color","white");
+			$(this).css("border-color","black");
+			$('input[name=Description]').removeAttr("disabled");
+			$('input[name=Description]').css("background-color","white");
+			$('input[name=Description]').css("color","black");
+			$('input[name=Description]').css("border-color","black");
+			$(this).attr("disabled","disabled");
+			$("#Des").hide();
+			$("#Act").show();
+		}
+	});
+	
+
 			// On initialise la latitude et la longitude de Paris (centre de la carte)
 			var lat = 47.361903;
 			var lon = -0.861994;
@@ -517,6 +691,5 @@ $(document).ready(function() {
 					layers: [fond,cities]
 				});
 				L.control.layers(baseLayers,overlays).addTo(macarte);
-
-				
+			
 });

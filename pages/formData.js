@@ -12,7 +12,7 @@ formData = {
 	etape3: {
 		'c1': [{id:'mh',lib:'Mobil-Home'},{id:'bw',lib:'Bungalow'},{id:'cha',lib:'Chalet'},{id:'te',lib:'Tente'},{id:'car',lib:'Caravanes'},{id:'bt',lib:'Bungatoile'},
 				{id:'r',lib:'Roulotte'},{id:'y',lib:'Yourte'},{id:'ti',lib:'Tipi'},{id:'cab',lib:'Cabane'}],
-		'l1': [{id:'0',lib:'0'},{id:'1',lib:'1'},{id:'2',lib:'2'},{id:'3',lib:'3'},{id:'4',lib:'4'},{id:'5',lib:'5'},
+		'l1': [{id:'1',lib:'1'},{id:'2',lib:'2'},{id:'3',lib:'3'},{id:'4',lib:'4'},{id:'5',lib:'5'},
 				{id:'6',lib:'6'},{id:'7',lib:'7'},{id:'8',lib:'8'},{id:'9',lib:'9+'}]
 		},
 	etape4: {
