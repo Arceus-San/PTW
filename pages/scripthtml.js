@@ -259,6 +259,7 @@ $(document).ready(function() {
 			$("#div").hide();
 			$("#Act").hide();
 		var cities = L.featureGroup();
+		var Acts = L.featureGroup();
 		var r = [];
 			function notation_stars(nb){
 				var cat = nb.split(" ")[0];
@@ -323,10 +324,26 @@ $(document).ready(function() {
 				}
 				console.log(cities);
 			}
+			
+		function layer2(val,type_act){
+			for (i=0;i<val.length;i++){
+				var nom = val[i].fields.nomoffre;
+				var coor = val[i].geometry.coordinates;
+				var coor2 = [coor[1],coor[0]];
+				var popup = L.popup().setContent(nom);
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+type_act+'.png',
+				iconSize:     [18, 25]
+				});
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(Acts);
+				}
+				
+			}
 var acts_aut = [];	
 var degus_aut =[];
 var pat_aut = [];		
 var data_gra =[];
+var myChart ;
 		function find_act(lat,lng,act,acts_autour){
 			for (i=0;i<act.length;i++){
 				var coor = act[i].geometry.coordinates;
@@ -339,7 +356,7 @@ var data_gra =[];
 			
 }
 function graphique(longu){
-		new Chart(document.getElementById("bar-chart"), {
+		myChart = new Chart(document.getElementById("bar-chart"), {
 			type: 'bar',
 			data: {
 			labels: ['Patrimoine','Dégustations','Activités'],
@@ -361,7 +378,27 @@ function graphique(longu){
 		});
 
 
-}	
+}
+
+document.getElementById("bar-chart").onclick = function(evt){
+            var activePoints = myChart.getElementsAtEvent(evt);
+            var firstPoint = activePoints[0];
+            var label = myChart.data.labels[firstPoint._index];
+			if (label == "Dégustations"){
+				Acts.clearLayers();
+				layer2(degus_aut,"Dégustations");
+			}
+			else if (label == "Patrimoine"){
+				Acts.clearLayers();
+				layer2(pat_aut,"Patrimoine");
+			}
+			else if (label == "Activités"){
+				Acts.clearLayers();
+				layer2(acts_aut,"Activités");
+			}
+			
+        };
+
 function activites (lats,lngs) {
 
 		$.getJSON('activites.json',function(data1){
@@ -600,6 +637,7 @@ function locatif(cities,filtre){
 
 
 			cities.on("click", function (event) {
+					Acts.clearLayers();
 					var clickedMarker = event.layer;
 					console.log("marker",clickedMarker);
 					console.log("r",r);
@@ -631,32 +669,6 @@ function locatif(cities,filtre){
 			
 
 
-	$('input[name=Choix1]').change(function(){
-    if($(this).is(':checked')) {
-        	cities.clearLayers();
-			locatif(cities);
-    } else {
-        cities.clearLayers();
-    }
-});
-
-	$('input[name=Choix2]').change(function(){
-    if($(this).is(':checked')) {
-        	cities.clearLayers();
-			hotel(cities);
-    } else {
-        cities.clearLayers();
-    }
-});
-
-	$('input[name=Choix3]').change(function(){
-    if($(this).is(':checked')) {
-        	cities.clearLayers();
-			camping(cities);
-    } else {
-        cities.clearLayers();
-    }
-});
 
 	$('input[name=Description]').click(function(){
 		if ($(this).disabled ){
@@ -672,6 +684,7 @@ function locatif(cities,filtre){
 			$(this).attr("disabled","disabled");
 			$("#Des").show();
 			$("#Act").hide();
+			Acts.clearLayers();
 		}
 	});
 	
@@ -717,14 +730,15 @@ function locatif(cities,filtre){
 					"Fond" : fond
 				};
 				var overlays = {
-					"Cities": cities
+					"Cities": cities ,
+					"Activités": Acts
 					
 				}
 				// Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
                 macarte = L.map('map',{
 					center: [lat, lon],
 					zoom: 8,
-					layers: [fond,cities]
+					layers: [fond,cities,Acts]
 				});
 				L.control.layers(baseLayers,overlays).addTo(macarte);
 			
