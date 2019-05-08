@@ -314,13 +314,17 @@ $(document).ready(function() {
 				}
 				return o[0];
 			}
-		function layer(val){
+		function layer(val,type_H){
 			for (i=0;i<val.length;i++){
 				var nom = val[i].fields.nomoffre;
 				var coor = val[i].geometry.coordinates;
 				var coor2 = [coor[1],coor[0]];
 				var popup = L.popup().setContent(nom);
-				var type = L.marker(coor2).bindPopup(popup).addTo(cities);
+				var Icon = L.icon({
+				iconUrl: 'Icons_markers/'+type_H+'.png',
+				iconSize:     [18, 25]
+				});
+				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
 				}
 				console.log(cities);
 			}
@@ -471,36 +475,12 @@ function hotel(cities,filtre){
 			}
 			console.log("salut",r);
 			}
-			salut(data,filtre[1],"type");
-			salut(data,filtre[2],"categorie");
-			salut(data,filtre[3],"equipement");
-			layer(r);
+			salut(r,filtre[1],"type");
+			salut(r,filtre[4],"categorie");
+			salut(r,filtre[5],"equipements");
+			layer(r,"Hôtel");
 			
-			function layer(id,val,Icon){
-			for (i=0;i<val.length;i++){
-				var nom = val[i].fields.nomoffre;
-				var coor = val[i].geometry.coordinates;
-				var coor2 = [coor[1],coor[0]];
-				var popup = L.popup().setContent(nom);
-				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
-				}
-				console.log(cities);
-			}
 
-			
-			$("#checkBox1").change(function(){
-			if($(this).is(':checked')) {
-				cities.clearLayers();
-				var valeur = $(this).val();
-				var id = valeur ;
-				var val = data;
-				var Icon = L.icon({
-				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25]
-				});
-				layer(id,val,Icon); 
-				}
-			});
 			
 			
 });		
@@ -533,41 +513,14 @@ function camping(cities,filtre){
 			}
 			console.log("salut",r);
 			}
-			salut(data,filtre[1],"type");
-			salut(data,filtre[2],"equipementsenlocation");
-			salut(data,filtre[3],"services");
-			salut(data,filtre[4],"categorie");
-			salut(data,filtre[4],"equipements");
-			layer(r);
+			salut(r,filtre[1],"type");
+			salut(r,filtre[2],"equipementsenlocation");
+			salut(r,filtre[3],"services");
+			salut(r,filtre[4],"categorie");
+			salut(r,filtre[5],"equipements");
+			layer(r,"Campings");
 			
 			
-			
-			function layer(id,val,Icon){
-			for (i=0;i<val.length;i++){
-				var nom = val[i].fields.nomoffre;
-				var coor = val[i].geometry.coordinates;
-				var coor2 = [coor[1],coor[0]];
-				var popup = L.popup().setContent(nom);
-				var type = L.marker(coor2,{icon: Icon}).bindPopup(popup).addTo(cities);
-				}
-				console.log(cities);
-
-			}
-
-			
-			$("#checkBox2").change(function(){
-			if($(this).is(':checked')) {
-				cities.clearLayers();
-				var valeur = $(this).val();
-				var id = valeur ;
-				var val = r;
-				var Icon = L.icon({
-				iconUrl: 'Icons_markers/'+valeur+'.png',
-				iconSize:     [18, 25]
-				});
-				layer(id,val,Icon); 
-				}
-			});
 			
 			
 
