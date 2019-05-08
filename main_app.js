@@ -89,7 +89,7 @@ function inNumbers(number, list){
 }
 
 
-function inStringList(string, str_list){
+function inStringListOr(string, str_list){
 
 	for(let h of str_list){
 		if(string.includes(h)){
@@ -98,6 +98,17 @@ function inStringList(string, str_list){
 	}
 
 	return false;
+}
+
+function inStringListAnd(string, str_list){
+
+	for(let h of str_list){
+		if(!string.includes(h)){
+			return false;
+		}
+	}
+
+	return true;
 }
 
 
@@ -249,7 +260,7 @@ app.post("/sendingData", (req, result) => {
 					//filtre etape3 sélection des hébergements pour les campings
 					if(data.etape3 != undefined){
 						res = res.filter(heb => {
-							return heb.fields.equipementsenlocation != undefined && inStringList(heb.fields.equipementsenlocation, data.etape3);
+							return heb.fields.equipementsenlocation != undefined && inStringListOr(heb.fields.equipementsenlocation, data.etape3);
 						});
 					}
 
@@ -259,7 +270,7 @@ app.post("/sendingData", (req, result) => {
 					//filtre etape4 sélection des services disponibles pour les campings
 					if(data.etape4 != undefined){
 						res = res.filter(heb => {
-							return heb.fields.services != undefined && inStringList(heb.fields.services, data.etape4);
+							return heb.fields.services != undefined && inStringListAnd(heb.fields.services, data.etape4);
 						});
 					}
 
@@ -292,7 +303,7 @@ app.post("/sendingData", (req, result) => {
 			//filtre etape6 (sélection des équipements)
 			if(data.etape6 != undefined){
 				res = res.filter(heb => {
-					return heb.fields.equipements != undefined && inStringList(heb.fields.equipements, data.etape6);
+					return heb.fields.equipements != undefined && inStringListAnd(heb.fields.equipements, data.etape6);
 				});
 			}
 
