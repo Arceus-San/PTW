@@ -367,7 +367,7 @@ function graphique(longu){
 			  datasets: [
 				{
 				  label: "Activités",
-				  backgroundColor: ["red","blue","green"],
+				  backgroundColor: ["red","blue","purple"],
 				  data: longu
 				}				
 			  ]
